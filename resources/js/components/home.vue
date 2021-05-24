@@ -57,7 +57,7 @@
                                             <p>{{item.bio}}</p>
                                         </div>
                                         <router-link class="nav-link" to="/theatresDetail">MovieBook</router-link>
-                                     <!-- <span><router-link class="nav-link" to="/moviecastsdetail">MovieCast</router-link></span>-->
+                                     <span><router-link class="nav-link" to="/moviecastsdetail">MovieCast</router-link></span>
                                     </div>
                                 </div>
                             </div>

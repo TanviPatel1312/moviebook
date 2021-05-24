@@ -42657,6 +42657,21 @@ var render = function() {
                             attrs: { to: "/theatresDetail" }
                           },
                           [_vm._v("MovieBook")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          [
+                            _c(
+                              "router-link",
+                              {
+                                staticClass: "nav-link",
+                                attrs: { to: "/moviecastsdetail" }
+                              },
+                              [_vm._v("MovieCast")]
+                            )
+                          ],
+                          1
                         )
                       ],
                       2
@@ -42804,9 +42819,7 @@ var render = function() {
                         "div",
                         { staticClass: "down-content" },
                         [
-                          _c("h2", [
-                            _vm._v("TheatreName:" + _vm._s(item.name))
-                          ]),
+                          _c("h2", [_vm._v(_vm._s(item.name))]),
                           _vm._v(" "),
                           _c("h3", [_vm._v(_vm._s(item.bio))]),
                           _vm._v(" "),

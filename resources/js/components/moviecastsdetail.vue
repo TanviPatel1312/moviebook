@@ -12,7 +12,7 @@
                             <div class="product-item">
                                 <a href="#"><img src="" alt=""></a>
                                 <div class="down-content">
-                                    <h2>TheatreName:{{item.name}}</h2>
+                                    <h2>{{item.name}}</h2>
                                     <h3>{{item.bio}}</h3>
                                     <router-link class="nav-link" to="/bookmovie">MovieBook</router-link>
 
