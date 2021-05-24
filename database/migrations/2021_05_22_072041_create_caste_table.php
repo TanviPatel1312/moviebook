@@ -13,7 +13,7 @@ class CreateCasteTable extends Migration
      */
     public function up()
     {
-        Schema::create('caste', function (Blueprint $table) {
+        Schema::create('castes', function (Blueprint $table) {
             $table->id();
             $table->string("name");
             $table->string("bio");
@@ -28,6 +28,6 @@ class CreateCasteTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('caste');
+        Schema::dropIfExists('castes');
     }
 }

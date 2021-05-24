@@ -19,13 +19,14 @@ class CasteController extends Controller
         return response()->json($cast);
     }
 
-    public function saveCast()
+    public function saveCast(Request $request)
     {
         $cast = new Caste();
-        $cast->name = request()->name;
-        $cast->bio = request()->bio;
+        $cast->name = $request->name;
+        $cast->bio = $request->bio;
 
         $cast->save();
+
     }
 
 
