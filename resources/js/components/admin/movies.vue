@@ -8,10 +8,10 @@
             <h1>ADMIN</h1>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item ">
+                    <li class="nav-item active">
                         <router-link  class="nav-link" to="/dashboard">Dashboard <span class="sr-only">(current)</span></router-link>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <router-link class="nav-link" to="/movies">Movie</router-link>
                     </li>
                     <li class="nav-item">
@@ -20,7 +20,21 @@
                     <li class="nav-item">
                         <router-link class="nav-link" to="/theatres">Theatres</router-link>
                     </li>
-
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/moviecast">MovieCast</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/movieTheatre">moviePost</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/city">Cities</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/showtime">movieshowtime</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/displaymoviebook">displaymoviebook</router-link>
+                    </li>
                 </ul>
 
             </div>
@@ -72,7 +86,7 @@
             <button class="btn btn-success btn-block" @click="save">
                 {{isEditing ? 'update':'save'}}
             </button>
-            <div class="col-md-12 mt-3" v-if="lists.length > 0">
+            <div class="col-md-12 mt-3" v-if="lists">
                 <h2 class="text-center">Movie detail</h2>
 
                 <ul class="list-group">
@@ -166,9 +180,7 @@ export default{
 
         }
     },
-    mounted() {
-        this.fetchAll();
-    },
+
     methods: {
         fetchAll(){
             axios.get(`all_movie`)
@@ -183,16 +195,12 @@ export default{
                 runtime : this.runtime,
             })
             .then(res=>{
-
                this.title= "",
                     this.overview= "",
                     this.releaseyear= "",
                     this.runtime= ""
                 this.fetchAll();
-
             })
-
-
         },
         editmovie(id){
 
@@ -228,6 +236,12 @@ export default{
 
             }
         }
-    }
+
+},
+    created() {
+        this.fetchAll();
+        this.getMovie();
+        this.getCast();
+    },
 }
 </script>

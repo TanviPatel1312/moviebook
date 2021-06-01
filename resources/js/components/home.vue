@@ -7,30 +7,34 @@
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
+
                         <div class="collapse navbar-collapse" id="navbarResponsive">
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
                                     <router-link class="nav-link" to="/">Home</router-link>
                                 </li>
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/displayBookTicket">displayBookTicket</router-link>
+                                </li>
+<!--                                <li class="nav-item">-->
+<!--                                    <router-link class="nav-link" to="/login">Login</router-link>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item">-->
+<!--                                    <router-link class="nav-link" to="/register">Register</router-link>-->
+<!--                                </li>-->
+
                             </ul>
                         </div>
                     </div>
                 </nav>
-            </header>
+
+        </header>
 
             <!-- Page Content -->
             <!-- Banner Starts Here -->
-            <div class="banner header-text">
-                <div class="owl-banner owl-carousel">
-                    <div class="banner-item-01">
-                        <div class="text-content">
 
-                        </div>
-                    </div>
-
-                </div>
-            </div>
             <!-- Banner Ends Here -->
+
 
             <div class="latest-products">
                 <div class="container" >
@@ -38,28 +42,25 @@
                         <div class="col-md-12">
                             <div class="section-heading"  >
                                 <h2>Latest movie</h2>
-                                <a href="/">view all Movies <i class="fa fa-angle-right"></i></a>
-
-
                         </div>
-                            <div class="row-md-4" v-for="item in lists"
+                            <div class="input-group">
+                                <input type="search"  v-model="str" @keyup="searchMovie" class="form-control rounded" placeholder="Search" aria-label="Search"
+                                       aria-describedby="search-addon" />
+                                <button type="button" class="btn btn-outline-primary">search</button>
+                            </div><br><br>
+                            <div class="row">
+                            <div class="col-md-6" v-for="item in movies"
                                  :key="item.id">
                                 <div class="product-item">
                                     <a href="#"><img src="" alt=""></a>
                                     <div class="down-content">
-                                      <h2>{{item.title}}</h2>
-                                        <p>{{item.overview}}</p>
-                                        <h5>{{ item.releaseyear }}</h5>
-                                        <h6>{{ item.runtime}} </h6>
-                                        <div class="row-md-4" v-for="item in cast"
-                                             :key="item.id">
-                                            <h2>{{item.name}}</h2>
-                                            <p>{{item.bio}}</p>
-                                        </div>
-                                        <router-link class="nav-link" to="/theatresDetail">MovieBook</router-link>
-                                     <span><router-link class="nav-link" to="/moviecastsdetail">MovieCast</router-link></span>
+                                        <h2>{{item.title}}</h2><br>
+
+                                        <router-link class="btn btn-primary" :to="'/moviecastsdetail/'+item.id" >ReadMore</router-link>
+
                                     </div>
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -75,10 +76,11 @@
                             <div class="inner-content">
                                 <p>Copyright &copy; 2020 latest Movie.
 
-                                    - Design: <a rel="tanvi patel">Movie APP</a></p>
+                                    - Design: <a rel="tanvi patel">Tanvi Patel</a></p>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </footer>
         </div>
@@ -87,42 +89,86 @@
 <script>
 export default {
     name: "home",
-    data() {
-        return {
-
-                lists: [],
-                cast:[],
-                title: "",
-                overview: "",
-                releaseyear: "",
-                runtime: "",
-                name:"",
-                bio:"",
-
-
-            }
-    },
     mounted() {
-        this.fetchAll();
+        console.log('Component mounted.')
+    },
+    data: function () {
+        return {
+            str: "",
+
+            movies: {
+                title: "",
+            }
+
+        }
     },
     methods: {
-        fetchAll() {
-            axios.get(`all_movie`)
-                .then(res => this.lists = res.data)
+        fetchAll(){
+            axios.get('all_castmovie')
+                .then(res=>this.lists=res.data)
+
         },
 
+        getMovie: function () {
+            axios.get('/api/getmovie')
+                .then(response => {
+                    this.movies = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        getCast: function () {
+            axios.get('/api/getcast')
+                .then(response => {
+                    this.casts = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        getAllMovieCast: function () {
+            axios.get('/api/moviecast/'+id)
+                .then(response => {
+                    this.moviecast = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        getPostMovies: function () {
+            axios.get('/api/getMovieHome')
+                .then(response => {
+                    this.movies = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+
+
+        searchMovie: function () {
+            if (this.str === "") {
+                this.getPostMovies();
+            } else {
+                axios.get('/api/search/' + this.str)
+                    .then(response => {
+                        this.movies= response.data
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
+        }
     },
-    getcast: function (id) {
-        axios.get(`/api/getcast/` + id)
-            .then(response => {
-                this.casts = response.data
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    },
+
     created() {
-        this.getcast();
+        this.fetchAll();
+        this.getMovie();
+        this.getCast();
+        this.getAllMovieCast();
+        this.getPostMovies();
+
     }
 }
 </script>

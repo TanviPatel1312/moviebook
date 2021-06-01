@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Movie;
 use App\Models\Theatres;
 use Illuminate\Http\Request;
 
@@ -31,7 +32,6 @@ class TheatresController extends Controller
         $theatre->save();
     }
 
-
     public function editTheatre($id)
     {
         $theatre = Theatres::find($id);
@@ -41,7 +41,6 @@ class TheatresController extends Controller
 
     public function update()
     {
-
         $theatre = Theatres::find(request()->id);
         $theatre->name = request()->name;
         $theatre->starttime = request()->starttime;
@@ -51,10 +50,9 @@ class TheatresController extends Controller
         $theatre->totalseat = request()->totalseat;
         $theatre->update();
     }
-
-
     public function deleteTheatre($id)
     {
         $theatre =Theatres::find($id)->delete();
     }
+
 }

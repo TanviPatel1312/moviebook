@@ -8,23 +8,27 @@
                     <div class="section-heading"  >
                         <h2>Theatres</h2>
                     </div>
-                    <div class="col-md-12-md-4" v-for="item in lists"
+
+                    <div class="col-md-12-md-4"  v-for="item in theaters"
                          :key="item.id">
                         <div class="product-item">
-                            <a href="#"><img src="" alt=""></a>
-                            <div class="down-content">
-                                <h2>TheatreName:{{item.name}}</h2>
+                            <div class="down-content" >
+                                <h3>{{item.title}}</h3><br>
+                                <h5>TheatreName:{{item.name}}</h5>
                                 <h5>startTime:{{item.starttime}}</h5>
                                 <h5>endTime:{{ item.endtime }}</h5>
                                 <h5>seatsAvailable:{{ item.seatsAvailable}} </h5>
+<!--                                <h6>city:{{item.cityname}}</h6>-->
                                <h5> <span>totalseat:{{ item.totalseat}} </span></h5>
-                                <router-link class="nav-link" to="/bookmovie">MovieBook</router-link>
-                                <h2  v-for="item in movie"
-                                     :key="item.id">
 
-                                    <h3>startTime:{{item.title}}</h3>
-
-                            </h2>
+                                <div  v-for="(city,index) in cities" :key="index">
+                                    <h6>city:{{city.cityname}}</h6>
+                                </div>
+                                <div  v-for="(movie,index) in movies" :key="index">
+                                    <h6>{{movie.title}}</h6>
+                                </div>
+                                <br>
+                                <router-link class="btn btn-primary" :to="'/bookmovie/'+item.id">MovieBook</router-link>
                             </div>
                         </div>
                     </div>
@@ -39,37 +43,66 @@
 <script>
 export default {
     name: "theatresDetail",
-    data(){
-        return {
-            lists: [],
-            name: "",
-            starttime: "",
-            endtime: "",
-            price: "",
-            seatsAvailable: "",
-            totalseat: "",
-            movie:[],
-            title:"",
-        }
-
-        },
     mounted() {
-        this.fetchAll();
+        console.log('Component mounted.')
+    },
+    data: function () {
+        return {
+            lists:[],
+            m_id: "",
+            t_id: "",
+            city_id:"",
+            movies: [],
+            theaters: [],
+            cities: [],
+
+        }
     },
     methods: {
-        fetchAll() {
-            axios.get('all_theatre')
-                .then(res => this.lists = res.data)
-        },
+
         getMovie: function () {
-            axios.get(`/api/getMovie`)
+            axios.get(`/api/getMovie/`+ this.$route.params.id)
+                .then(response => {
+                    this.movies = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+      getCity: function () {
+            axios.get('/api/getCity/'+ this.$route.params.id)
+                .then(response => {
+                    this.cities = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        getTheatre: function () {
+            axios.get('/api/getTheatre/'+ this.$route.params.id)
                 .then(response => {
                     this.theaters = response.data
                 })
                 .catch(error => {
                     console.log(error);
                 })
-        },
+        },getAllMoviePost:function () {
+            axios.get('/api/movieposts/' + id)
+                .then(response => {
+                    this.theatres = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        }
+
+    },
+    created() {
+
+        this.getMovie();
+        this.getCity();
+        this.getTheatre();
+        this.getAllMoviePost();
 
     }
 }

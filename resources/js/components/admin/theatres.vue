@@ -8,7 +8,7 @@
             <h1>ADMIN</h1>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item ">
+                    <li class="nav-item active">
                         <router-link  class="nav-link" to="/dashboard">Dashboard <span class="sr-only">(current)</span></router-link>
                     </li>
                     <li class="nav-item">
@@ -17,10 +17,24 @@
                     <li class="nav-item">
                         <router-link  class="nav-link" to="/casts">Casts </router-link>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <router-link class="nav-link" to="/theatres">Theatres</router-link>
                     </li>
-
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/moviecast">MovieCast</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/movieTheatre">moviePost</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/city">Cities</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/showtime">movieshowtime</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/displaymoviebook">displaymoviebook</router-link>
+                    </li>
                 </ul>
 
             </div>

@@ -11,5 +11,6 @@ class Moviepost extends Model
     protected $fillable = [
         't_id',
         'm_id',
+        'city_id',
     ];
 }

@@ -17,9 +17,11 @@ class CreateMoviepostsTable extends Migration
             $table->id();
             $table->unsignedBigInteger("t_id");
             $table->unsignedBigInteger("m_id");
+            $table->unsignedBigInteger('city_id');
             $table->timestamps();
             $table->foreign("t_id")->references("id")->on("theatres")->onDelete('cascade');
             $table->foreign("m_id")->references("id")->on("movies")->onDelete('cascade');
+            $table->foreign("city_id")->references("id")->on("cities")->onDelete('cascade');
         });
     }
 

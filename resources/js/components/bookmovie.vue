@@ -1,100 +1,173 @@
 <template>
 <div>
-    <center>
-    <div class="col-md-6">
-        <div class="form-group">
+        <div class="form-group container w-50 my-2">
             <div style="padding: 15px">
-                <h3 class="text-center">Movie Booking details!! </h3>
+                <h3 class="text-center">Add the Movie Book details!! </h3>
             </div>
-            <label for="Name"></label>
+            <label for="username">UserNames</label>
             <input
                 type="text"
-                id="Name"
-                placeholder="Enter name"
-                class="form-control"
-                v-model="Name"
-            >
+                id="username"
+                v-model="username"
+                placeholder="Enter Username"
+                class="form-control">
         </div>
-        <div class="form-group">
-            <label for="showtime"></label>
-            <input
-                type="time"
-                id="showtime"
-                placeholder="Enter showtime"
-                class="form-control"
-                v-model="showtime"
-            >
-        </div>
-        <div class="form-group">
-            <label for="seats"></label>
-            <input
-                type="number"
-                id="seats"
-                placeholder="Enter seats"
-                class="form-control"
-                v-model="seats"
-            >
-        </div>
-        <div class="form-group">
-            <label for="city"></label>
-            <input
-                type="text"
-                id="city"
-                placeholder="Enter city"
-                class="form-control"
-                v-model="city"
-            >
-        </div>
+    <div class="form-group container w-50 my-2">
+        <label>Select showTime:</label>
+        <select class='form-control' id="showtimes" v-model='showtime' >
+            <option v-for="item in showtimes" :value="item.id">{{item.showtime}}</option>
+        </select>
+    </div>
+    <div class="container w-50 my-2">
+        <label>Select Show Date :</label>
+        <input class="form-control" id="date" type="date" @change="getBookedSeat" v-model="showtimedate"
+               name="show_time_date">
+    </div>
+    <div class="container p-1" style="min-height:500px;border-radius:5px;background-color: #80ced6;">
 
-        <button class="btn btn-success btn-block" @click="save">
-            Save
-        </button>
-</div>
-    </center>
+        <div class="alert alert-danger text-center" v-if="errorMessage">{{ errorMessage }}</div>
+        <div class="d-flex bd-highlight justify-content-center flex-wrap" id="content">
+            <div v-for="box in 101" @click="getSeats(box)" v-model="selectedSeats" :id="box" :value="box"
+                 class="border p-2 m-3 text-center"
+                 style="width: 75px;">{{ box }}
+            </div>
+            {{selectedSeats}}        </div>
+    </div><br>
+    <div align="center">
+    <button type="button" id="btnBook"  @click="addBookTickets" class="btn btn-primary ">
+BookMovie
+    </button>
+        <div class="alert alert-success text-center" v-if="successMessage">{{ successMessage }}</div>
+    </div>
+
 </div>
 </template>
 
 <script>
+import Directory from "./admin/movieCreate";
 export default {
     name: "bookmovie",
-    data() {
+    components: {Directory},
+    data: function () {
         return {
-            lists: [],
+            showtime:"",
+            showtimes:[],
+            showtimedate:"",
+            seats: [],
+            username:"",
+            selectedSeats: [],
+            onlySeats: [],
 
-            Name: "",
-            showtime: "",
-            seats: "",
-            city: "",
+
         }
-    },
-    mounted() {
-        this.fetchAll();
-    },
-    methods: {
-        fetchAll() {
-            axios.get(`all_book`)
-                .then(res => this.lists = res.data)
 
         },
-        save() {
-            axios.post('save_book', {
-                Name: this.Name,
+    methods: {
+        getshowtime: function () {
+            axios.get('/api/getshowtime')
+                .then(response => {
+                    this.showtimes = response.data
+                    // this.casts = this.casts[0]
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        addBookTickets() {
+            axios.post('/api/save_book', {
+                username: this.username,
                 showtime: this.showtime,
-                seats: this.seats,
-                city: this.city,
+                showtimedate: this.showtimedate,
+                seats: this.selectedSeats,
             })
                 .then(res => {
-
-                    this.Name = "",
+                    this.username = [],
                         this.showtime = "",
-                        this.seats = "",
-                        this.city = ""
-                    this.fetchAll();
-
+                        this.showtimedate = "",
+                        this.seats = [],
+                        this.getBookedSeat();
+                    this.successMessage = "Your seat is booked successfully";
                 })
-
-
         },
+        getBookedSeat: function () {
+            const data = {
+                username :this.username,
+                showtime: this.showtime,
+                showtimedate:this.showtimedate,
+                seats : this.seats,
+            }
+            axios.post('/api/getSeats', data)
+                .then(response => {
+                    this.seats = response.data;
+                    let str = "";
+                    this.onlySeats = [];
+                    for (let i = 0; i < this.seats.length; i++) {
+                        for (let j = 0; j < this.seats[i].seats.length; j++) {
+                            if (this.seats[i].seats[j] === "|") {
+                                    this.onlySeats.push(str);
+                                str = "";
+                                continue;
+                            } else {
+                                str += this.seats[i].seats[j];
+                            }
+                        }
+                        this.onlySeats.push(str);
+                        str = "";
+                    }
+                    this.closeBookedSeat();
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        getSeats: function (seat) {
+            if ($("#" + seat).hasClass("bg-danger text-light")) {
+                alert("This seat is already booked! Please Choose another seat!");
+            } else {
+                if ($("#" + seat).hasClass("bg-light text-dark")) {
+                    if (this.selectedSeats.length === 10) {
+                        alert("you can select maximum 10 tickets");
+                    } else {
+                        $("#" + seat).removeClass("bg-light text-dark");
+                        $("#" + seat).addClass("bg-dark text-light");
+                        this.selectedSeats.push(seat);
+                    }
+                } else {
+                    $("#" + seat).removeClass("bg-dark text-light");
+                    $("#" + seat).addClass("bg-light text-dark");
+                    this.selectedSeats.pop(seat);
+
+                }
+            }
+        },
+        closeBookedSeat: function () {
+            if (this.onlySeats.length === 101) {
+                this.errorMessage = "This Show is full";
+            }
+            for (let i = 0; i <= 101; i++) {
+                if (this.onlySeats.includes(i.toString())) {
+                    if ($("#" + i).hasClass("bg-dark text-light")) {
+                        $("#" + i).removeClass("bg-dark text-light");
+                    }
+                    if ($("#" + i).hasClass("bg-light text-dark")) {
+                        $("#" + i).removeClass("bg-light text-dark");
+                        }
+                    $("#" + i).addClass("bg-danger text-light");
+                } else {
+                    if ($("#" + i).hasClass("bg-danger text-light")) {
+                        $("#" + i).removeClass("bg-danger text-light");
+                    }
+                    $("#" + i).addClass("bg-light text-dark");
+                }
+            }
+        }
+
+    },
+    created() {
+       // this.fetchAll();
+        this.getshowtime();
+        this.getBookedSeat();
+
     }
 }
 

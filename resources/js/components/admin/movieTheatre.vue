@@ -42,14 +42,15 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Casts Movie</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label>Select Caste:</label>
-                            <select class='form-control' id="getcast" v-model='c_id' >
-                                <option v-for="cast in casts"  :value="cast.id">{{cast.name}}</option>
-                            </select>
+                    <div class="card-header">Post Movie</div>
 
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <label>Select City:</label>
+                            <select class='form-control' v-model='city_id'>
+                                <option v-for="city in cities"  :value="city.id">{{city.cityname}}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -58,19 +59,24 @@
                                 <option v-for="movie in movies" :value="movie.id">{{movie.title}}</option>
                             </select>
                         </div>
-                            <button class="btn btn-primary" @click="save">Add</button>
+
+                        <div class="form-group">
+                            <label>Select Theatres:</label>
+                            <select class='form-control' v-model='t_id' >
+                                <option v-for="Theatre in theaters" :value="Theatre.id">{{Theatre.name}}</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" @click="save">Add</button>
                         <div>
 
-
-                            <h2 class="text-center">CastMovie detail</h2>
-
+                            <h2 class="text-center">MoviePost detail</h2>
                             <ul class="list-group">
                                 <li
                                     class="list-group-item"
                                     v-for="item in lists"
                                     :key="item.id"
                                 >
-                                    {{item.name}} - {{item.title}}
+                                    {{item.cityname}} - {{item.title}} - {{item.name}}
 
                                     <span class="float-right">
                 <button class="btn btn-warning btn-sm mr-2"
@@ -81,9 +87,9 @@
                                 </li>
                             </ul>
                         </div>
-                        </div>
                     </div>
                 </div>
+            </div>
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -96,9 +102,9 @@
                         <div class="modal-body">
                             <form>
                                 <div class="form-group">
-                                    <label>Select Caste:</label>
-                                    <select class='form-control' v-model='editc_id' @change="getCast">
-                                        <option v-for="cast in casts"  :value="cast.id">{{cast.name}}</option>
+                                    <label>Select city:</label>
+                                    <select class='form-control' v-model='editcity_id' @change="getCity">
+                                        <option v-for="city in cities"  :value="city.id">{{city.cityname}}</option>
                                     </select>
 
                                 </div>
@@ -106,6 +112,12 @@
                                     <label>Select Movie:</label>
                                     <select class='form-control' v-model='editm_id' @change="getMovie">
                                         <option v-for="movie in movies" :value="movie.id">{{movie.title}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Select Theatres:</label>
+                                    <select class='form-control' v-model='editt_id' @change="getTheatre">
+                                        <option v-for="Theatre in theaters" :value="Theatre.id">{{Theatre.name}}</option>
                                     </select>
                                 </div>
 
@@ -119,64 +131,70 @@
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-
-
+    </div>
 </template>
 
 <script>
 export default {
-    name: "moviecast",
+    name: "movieTheatre.vue",
     mounted() {
         console.log('Component mounted.')
     },
     data: function () {
         return {
-                lists:[],
-                m_id: "",
-                c_id: "",
+            lists:[],
+            m_id: "",
+            t_id: "",
+            city_id:"",
             editm_id: '',
-            editc_id :'',
-                movies: [],
-                casts: [],
+            editt_id :'',
+            editcity_id :'',
+            movies: [],
+            theaters: [],
+            cities: [],
 
         }
     },
     methods: {
         fetchAll(){
-            axios.get('all_castmovie')
+            axios.get('all_post')
                 .then(res=>this.lists=res.data)
+
 
         },
         save() {
-            axios.post(`save_CastMovie`, {
-                c_id: this.c_id,
+            axios.post(`save_post`, {
+                t_id: this.t_id,
                 m_id: this.m_id,
+                city_id: this.city_id,
 
             })
                 .then(res => {
-                    this.c_id = "",
+                    this.t_id = "",
                         this.m_id = "",
+                        this.city_id = "",
                         this.fetchAll();
 
                 })
         },
         editCasteMovie(id){
 
-            axios.get(`edit_CastMovie/`+id)
+            axios.get(`edit_post/`+id)
                 .then(response=>{
                     this.id = response.data.id;
-                    this.editc_id = response.data.c_id;
+                    this.editt_id = response.data.t_id;
                     this.editm_id = response.data.m_id;
+                    this.editcity_id = response.data.city_id;
 
                 })
         },
         update(){
-            axios.put(`update_CastMovie`,{
+            axios.put(`update_post`,{
                 id : this.id,
-                c_id :this.editc_id,
+                t_id :this.editt_id,
                 m_id : this.editm_id,
+                city_id : this.editcity_id,
             })
                 .then(response => {
                     this.fetchAll();
@@ -186,18 +204,15 @@ export default {
         },
         deleteCastMovie(id){
             try{
-                axios.delete(`delete_CastMovie/`+id)
-                    .then(res=> {
-                            this.fetchAll()
-                        }
-                    )
+                axios.delete(`delete_post/`+id)
+                    .then(res=> this.fetchAll())
 
             }catch(e){
 
             }
         },
         getMovie: function () {
-            axios.get('/api/getmovie/' + this.$route.params.id)
+            axios.get('/api/getMovie')
                 .then(response => {
                     this.movies = response.data
                 })
@@ -205,10 +220,19 @@ export default {
                     console.log(error);
                 })
             // console.log('getmovie');
-        }, getCast: function () {
-            axios.get('/api/getcast')
+        }, getCity: function () {
+            axios.get('/api/getCity')
                 .then(response => {
-                    this.casts = response.data
+                    this.cities = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        getTheatre: function () {
+            axios.get('/api/getTheatre')
+                .then(response => {
+                    this.theaters = response.data
                 })
                 .catch(error => {
                     console.log(error);
@@ -218,8 +242,9 @@ export default {
     },
     created() {
         this.fetchAll();
-            this.getMovie();
-            this.getCast();
+        this.getMovie();
+        this.getCity();
+        this.getTheatre();
     }
 
 }

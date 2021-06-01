@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,9 +20,21 @@
                     <li class="nav-item">
                         <router-link class="nav-link" to="/theatres">Theatres</router-link>
                     </li>
-<!--                    <li class="nav-item">-->
-<!--                        <router-link class="nav-link" to="/moviecast">MovieCast</router-link>-->
-<!--                    </li>-->
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/moviecast">MovieCast</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/movieTheatre">moviePost</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/city">Cities</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/showtime">movieshowtime</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/displaymoviebook">displaymoviebook</router-link>
+                    </li>
                 </ul>
 
             </div>

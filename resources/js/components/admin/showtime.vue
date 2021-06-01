@@ -34,33 +34,22 @@
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" to="/displaymoviebook">displaymoviebook</router-link>
-                    </li>
-                </ul>
+                    </li>                </ul>
 
             </div>
         </nav>
         <div class="col-md-6">
             <div class="form-group">
                 <div style="padding: 15px">
-                    <h3 class="text-center">Add the Cast details!! </h3>
+                    <h3 class="text-center">Add the showtime details!! </h3>
                 </div>
-                <label for="name"></label>
+                <label for="showtime"></label>
                 <input
-                    type="text"
-                    id="name"
-                    placeholder="Enter name"
+                    type="time"
+                    id="showtime"
+                    placeholder="Enter showtime"
                     class="form-control"
-                    v-model="name"
-                >
-            </div>
-            <div class="form-group">
-                <label for="bio"></label>
-                <input
-                    type="text"
-                    id="bio"
-                    placeholder="Enter bio"
-                    class="form-control"
-                    v-model="bio"
+                    v-model="showtime"
                 >
             </div>
 
@@ -68,7 +57,7 @@
                 {{isEditing ? 'update':'save'}}
             </button>
             <div class="col-md-12 mt-3" v-if="lists.length > 0">
-                <h2 class="text-center">Cast detail</h2>
+                <h2 class="text-center">showtime detail</h2>
 
                 <ul class="list-group">
                     <li
@@ -76,12 +65,12 @@
                         v-for="item in lists"
                         :key="item.id"
                     >
-                        {{item.name}} - {{item.bio}}
+                        {{item.showtime}}
 
                         <span class="float-right">
                 <button class="btn btn-warning btn-sm mr-2"
-                        data-toggle="modal"     data-target="#exampleModal" @click="editcast(item.id)">Edit</button>
-                <button class="btn btn-danger btn-sm mr-2" @click="deletecast(item.id)">Delete</button>
+                        data-toggle="modal"   data-target="#exampleModal" @click="editshow(item.id)">Edit</button>
+                <button class="btn btn-danger btn-sm mr-2" @click="deleteshow(item.id)">Delete</button>
                 </span>
 
                     </li>
@@ -103,15 +92,11 @@
                         <div class="modal-body">
                             <form>
                                 <div class="form-group">
-                                    <label for="editcast">Title</label>
-                                    <input type="text" v-model="editcast"  class="form-control" id="editcast"  placeholder="Enter name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="editbio">Overview</label>
-                                    <input type="text"  v-model="editbio"  class="form-control" id="editbio" placeholder="Enter bio">
+                                    <label for="editshowtime">ShowTime</label>
+                                    <input type="text" v-model="editshowtime"  class="form-control" id="editshowtime"  placeholder="Enter showtime">
                                 </div>
 
-                                <button type="submit"  @click.prevent="update" data-dismiss="modal" class="btn btn-primary">Submit</button>
+                                <button type="submit"  @click.prevent="updateshow" data-dismiss="modal" class="btn btn-primary">Submit</button>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -126,20 +111,13 @@
 </template>
 
 <script>
-export default{
-    name: 'casts',
+export default {
+    name: "showtime",
     data(){
         return{
             lists:[],
-
-            name: "",
-            bio: "",
-
-            editname: '',
-            editbio :'',
-
-
-
+            showtime: "",
+            editshowtime: '',
         }
     },
     mounted() {
@@ -147,52 +125,42 @@ export default{
     },
     methods: {
         fetchAll(){
-            axios.get(`all_cast`)
+            axios.get(`allshow`)
                 .then(res=>this.lists=res.data)
 
         },
         save(){
-            axios.post(`save_cast`,{
-                name :this.name,
-                bio: this.bio,
-
+            axios.post(`save`,{
+                showtime :this.showtime,
             })
                 .then(res=>{
 
-                    this.name= "",
-                        this.bio= "",
-
-                    this.fetchAll();
+                    this.showtime= "",
+                        this.fetchAll();
 
                 })
-
-
         },
-        editcaste(id){
-
-            axios.get(`edit_cast/`+id)
+        editshow(id){
+            axios.get(`edit/`+id)
                 .then(response=>{
                     this.id = response.data.id;
-                    this.editname = response.data.name;
-                    this.editbio = response.data.bio;
+                    this.editshowtime = response.data.showtime;
 
                 })
         },
-        update(){
-            axios.put(`update_cast`,{
+        updateshow(){
+            axios.put(`update`,{
                 id : this.id,
-                name :this.editname,
-                bio : this.editbio,
+                showtime :this.editshowtime,
+
             })
                 .then(response => {
                     this.fetchAll();
                 } );
-
-
         },
-        deletcast(id){
+        deleteshow(id){
             try{
-                axios.delete(`delete_cast/` +id)
+                axios.delete(`delete/` +id)
                     .then(res=> this.fetchAll())
 
             }catch(e){
@@ -202,3 +170,7 @@ export default{
     }
 }
 </script>
+
+<style scoped>
+
+</style>
