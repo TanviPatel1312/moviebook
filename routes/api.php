@@ -106,6 +106,9 @@ Route::get('getCity/{id}', [MoviePostController::class,'getCitybyid']);
 Route::get('getshowtime', [ShowTimeController::class,'getshowtime']);
 Route::any("/getSeats", [BookMovieController::class, 'getSeats']);
 Route::post('save_book',[BookMovieController::class,'savebook']);
+Route::get('getMovie', [BookMovieController::class,'getMovie']);
+
+Route::get('getMovie/{id}', [BookMovieController::class,'getMoviebyid']);
 
 
 Route::get("/search/{str}", [MovieController::class, "getSearchMovie"]);

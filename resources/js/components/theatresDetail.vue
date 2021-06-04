@@ -8,7 +8,9 @@
                     <div class="section-heading"  >
                         <h2>Theatres</h2>
                     </div>
-
+                    <div  v-for="(movie,index) in movies" :key="index">
+                        <h2>{{movie.title}}</h2>
+                    </div>
                     <div class="col-md-12-md-4"  v-for="item in theaters"
                          :key="item.id">
                         <div class="product-item">
@@ -19,14 +21,14 @@
                                 <h5>endTime:{{ item.endtime }}</h5>
                                 <h5>seatsAvailable:{{ item.seatsAvailable}} </h5>
 <!--                                <h6>city:{{item.cityname}}</h6>-->
-                               <h5> <span>totalseat:{{ item.totalseat}} </span></h5>
+                               <span> totalseat:{{ item.totalseat}} </span>
+
 
                                 <div  v-for="(city,index) in cities" :key="index">
                                     <h6>city:{{city.cityname}}</h6>
+                                    <h6>city:{{city.cityname}}</h6>
                                 </div>
-                                <div  v-for="(movie,index) in movies" :key="index">
-                                    <h6>{{movie.title}}</h6>
-                                </div>
+
                                 <br>
                                 <router-link class="btn btn-primary" :to="'/bookmovie/'+item.id">MovieBook</router-link>
                             </div>

@@ -65,6 +65,7 @@ export default {
         created: function(){
             this.getMovie();
             this.getTheatre();
+            this.fetchAll();
 
         },
 

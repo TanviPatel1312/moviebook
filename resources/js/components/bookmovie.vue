@@ -1,9 +1,13 @@
 <template>
 <div>
+
         <div class="form-group container w-50 my-2">
             <div style="padding: 15px">
                 <h3 class="text-center">Add the Movie Book details!! </h3>
             </div>
+<!--            <div  v-for="(movie,index) in movies" :key="index">-->
+<!--                <h3>{{movie.title}}</h3>-->
+<!--            </div>-->
             <label for="username">UserNames</label>
             <input
                 type="text"
@@ -57,6 +61,8 @@ export default {
             username:"",
             selectedSeats: [],
             onlySeats: [],
+            movies:[],
+            m_id:[],
 
 
         }
@@ -72,6 +78,17 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
+        },
+        getMovie: function () {
+            axios.get('/api/getMovie/'+id)
+                .then(response => {
+                    this.movies = response.data
+                    this.movies = this.movies[0]
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+
         },
         addBookTickets() {
             axios.post('/api/save_book', {
@@ -167,6 +184,7 @@ export default {
        // this.fetchAll();
         this.getshowtime();
         this.getBookedSeat();
+        this.getMovie();
 
     }
 }

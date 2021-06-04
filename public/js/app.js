@@ -3215,7 +3215,7 @@ __webpack_require__.r(__webpack_exports__);
     getMovie: function getMovie() {
       var _this6 = this;
 
-      axios.get('/api/getmovie/' + this.$route.params.id).then(function (response) {
+      axios.get('/api/getmovie').then(function (response) {
         _this6.movies = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -4016,6 +4016,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "bookmovie",
@@ -4030,7 +4034,9 @@ __webpack_require__.r(__webpack_exports__);
       seats: [],
       username: "",
       selectedSeats: [],
-      onlySeats: []
+      onlySeats: [],
+      movies: [],
+      m_id: []
     };
   },
   methods: {
@@ -4043,8 +4049,18 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    addBookTickets: function addBookTickets() {
+    getMovie: function getMovie() {
       var _this2 = this;
+
+      axios.get('/api/getMovie/' + id).then(function (response) {
+        _this2.movies = response.data;
+        _this2.movies = _this2.movies[0];
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    addBookTickets: function addBookTickets() {
+      var _this3 = this;
 
       axios.post('/api/save_book', {
         username: this.username,
@@ -4052,12 +4068,12 @@ __webpack_require__.r(__webpack_exports__);
         showtimedate: this.showtimedate,
         seats: this.selectedSeats
       }).then(function (res) {
-        _this2.username = [], _this2.showtime = "", _this2.showtimedate = "", _this2.seats = [], _this2.getBookedSeat();
-        _this2.successMessage = "Your seat is booked successfully";
+        _this3.username = [], _this3.showtime = "", _this3.showtimedate = "", _this3.seats = [], _this3.getBookedSeat();
+        _this3.successMessage = "Your seat is booked successfully";
       });
     },
     getBookedSeat: function getBookedSeat() {
-      var _this3 = this;
+      var _this4 = this;
 
       var data = {
         username: this.username,
@@ -4066,28 +4082,28 @@ __webpack_require__.r(__webpack_exports__);
         seats: this.seats
       };
       axios.post('/api/getSeats', data).then(function (response) {
-        _this3.seats = response.data;
+        _this4.seats = response.data;
         var str = "";
-        _this3.onlySeats = [];
+        _this4.onlySeats = [];
 
-        for (var i = 0; i < _this3.seats.length; i++) {
-          for (var j = 0; j < _this3.seats[i].seats.length; j++) {
-            if (_this3.seats[i].seats[j] === "|") {
-              _this3.onlySeats.push(str);
+        for (var i = 0; i < _this4.seats.length; i++) {
+          for (var j = 0; j < _this4.seats[i].seats.length; j++) {
+            if (_this4.seats[i].seats[j] === "|") {
+              _this4.onlySeats.push(str);
 
               str = "";
               continue;
             } else {
-              str += _this3.seats[i].seats[j];
+              str += _this4.seats[i].seats[j];
             }
           }
 
-          _this3.onlySeats.push(str);
+          _this4.onlySeats.push(str);
 
           str = "";
         }
 
-        _this3.closeBookedSeat();
+        _this4.closeBookedSeat();
       })["catch"](function (error) {
         console.log(error);
       });
@@ -4141,6 +4157,7 @@ __webpack_require__.r(__webpack_exports__);
     // this.fetchAll();
     this.getshowtime();
     this.getBookedSeat();
+    this.getMovie();
   }
 });
 
@@ -4763,6 +4780,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "theatresDetail",
   mounted: function mounted() {
@@ -4847,6 +4866,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__.default.use(vue_router__WEBPACK_IMPORTED_MODULE
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__.default({
   history: true,
   mode: 'history',
+  linkActiveClass: "active",
   routes: _route__WEBPACK_IMPORTED_MODULE_2__.default
 });
 vue__WEBPACK_IMPORTED_MODULE_0__.default.component('app-header', __webpack_require__(/*! ./components/Header.vue */ "./resources/js/components/Header.vue").default);
@@ -44302,7 +44322,7 @@ var render = function() {
                         _vm._l(_vm.cities, function(city) {
                           return _c(
                             "option",
-                            { domProps: { value: city.id } },
+                            { domProps: { value: _vm.editcity_id.id } },
                             [_vm._v(_vm._s(city.cityname))]
                           )
                         }),
@@ -44347,7 +44367,7 @@ var render = function() {
                         _vm._l(_vm.movies, function(movie) {
                           return _c(
                             "option",
-                            { domProps: { value: movie.id } },
+                            { domProps: { value: _vm.editm_id.id } },
                             [_vm._v(_vm._s(movie.title))]
                           )
                         }),
@@ -44392,7 +44412,7 @@ var render = function() {
                         _vm._l(_vm.theaters, function(Theatre) {
                           return _c(
                             "option",
-                            { domProps: { value: Theatre.id } },
+                            { domProps: { value: _vm.editt_id.id } },
                             [_vm._v(_vm._s(Theatre.name))]
                           )
                         }),
@@ -44725,6 +44745,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
+                  attrs: { id: "getmovie" },
                   on: {
                     change: function($event) {
                       var $$selectedVal = Array.prototype.filter
@@ -44876,7 +44897,7 @@ var render = function() {
                         _vm._l(_vm.casts, function(cast) {
                           return _c(
                             "option",
-                            { domProps: { value: cast.id } },
+                            { domProps: { value: _vm.c_id.id } },
                             [_vm._v(_vm._s(cast.name))]
                           )
                         }),
@@ -44921,7 +44942,7 @@ var render = function() {
                         _vm._l(_vm.movies, function(movie) {
                           return _c(
                             "option",
-                            { domProps: { value: movie.id } },
+                            { domProps: { value: _vm.m_id.id } },
                             [_vm._v(_vm._s(movie.title))]
                           )
                         }),
@@ -45501,7 +45522,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
                       _c("label", { attrs: { for: "editruntime" } }, [
-                        _vm._v("Cast Members")
+                        _vm._v("runtime")
                       ]),
                       _vm._v(" "),
                       _c("input", {
@@ -47858,6 +47879,12 @@ var render = function() {
             [
               _vm._m(0),
               _vm._v(" "),
+              _vm._l(_vm.movies, function(movie, index) {
+                return _c("div", { key: index }, [
+                  _c("h2", [_vm._v(_vm._s(movie.title))])
+                ])
+              }),
+              _vm._v(" "),
               _vm._l(_vm.theaters, function(item) {
                 return _c(
                   "div",
@@ -47889,25 +47916,19 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("h5", [
-                            _c("span", [
-                              _vm._v(
-                                "totalseat:" + _vm._s(item.totalseat) + " "
-                              )
-                            ])
+                          _c("span", [
+                            _vm._v(" totalseat:" + _vm._s(item.totalseat) + " ")
                           ]),
                           _vm._v(" "),
                           _vm._l(_vm.cities, function(city, index) {
                             return _c("div", { key: index }, [
                               _c("h6", [
                                 _vm._v("city:" + _vm._s(city.cityname))
+                              ]),
+                              _vm._v(" "),
+                              _c("h6", [
+                                _vm._v("city:" + _vm._s(city.cityname))
                               ])
-                            ])
-                          }),
-                          _vm._v(" "),
-                          _vm._l(_vm.movies, function(movie, index) {
-                            return _c("div", { key: index }, [
-                              _c("h6", [_vm._v(_vm._s(movie.title))])
                             ])
                           }),
                           _vm._v(" "),

@@ -11,6 +11,7 @@ import routes from './route'
 const router = new VueRouter({
     history: true,
     mode: 'history',
+    linkActiveClass: "active",
     routes
 })
 Vue.component('app-header', require('./components/Header.vue').default);

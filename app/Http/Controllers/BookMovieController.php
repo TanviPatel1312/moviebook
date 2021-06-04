@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\bookmovie;
+use App\Models\Movie;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -27,13 +28,29 @@ class BookMovieController extends Controller
 
         if($request->time == ''){
             $date = date("Y-m-d", strtotime(Carbon::now()));
-        }else{
+        }elseif ($request->time == ''){
+
+          $time = time("HH:MM:SS XM ", strtotime(Carbon::now()));
+        }
+        else{
+            $time=$request->time;
             $date = $request->time;
         }
+
         return bookmovie::select('bookmovies.seats','bookmovies.username','bookmovies.showtime','bookmovies.showtimedate')
             ->where("bookmovies.username",$request->username)
-            ->where("bookmovies.showtime",'LIKE',"%{$request->showtime}%")
+            ->where("bookmovies.showtime",'LIKE',$time)
             ->where("bookmovies.showtimedate",$date)
             ->get();
+    }
+    public function getMovie()
+    {
+        $data = Movie::get();
+
+        return response()->json($data);
+    }
+    public function getMoviebyid($id)
+    {
+        return Movie::where("id",$id)->get();
     }
 }

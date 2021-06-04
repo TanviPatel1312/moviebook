@@ -127,7 +127,6 @@ export default {
         fetchAll(){
             axios.get(`allshow`)
                 .then(res=>this.lists=res.data)
-
         },
         save(){
             axios.post(`save`,{
@@ -145,6 +144,7 @@ export default {
                 .then(response=>{
                     this.id = response.data.id;
                     this.editshowtime = response.data.showtime;
+
 
                 })
         },

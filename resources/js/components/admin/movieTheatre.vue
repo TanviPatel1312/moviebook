@@ -104,20 +104,20 @@
                                 <div class="form-group">
                                     <label>Select city:</label>
                                     <select class='form-control' v-model='editcity_id' @change="getCity">
-                                        <option v-for="city in cities"  :value="city.id">{{city.cityname}}</option>
+                                        <option v-for="city in cities"  :value="editcity_id.id">{{city.cityname}}</option>
                                     </select>
 
                                 </div>
                                 <div class="form-group">
                                     <label>Select Movie:</label>
                                     <select class='form-control' v-model='editm_id' @change="getMovie">
-                                        <option v-for="movie in movies" :value="movie.id">{{movie.title}}</option>
+                                        <option v-for="movie in movies" :value="editm_id.id">{{movie.title}}</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Select Theatres:</label>
                                     <select class='form-control' v-model='editt_id' @change="getTheatre">
-                                        <option v-for="Theatre in theaters" :value="Theatre.id">{{Theatre.name}}</option>
+                                        <option v-for="Theatre in theaters" :value="editt_id.id">{{Theatre.name}}</option>
                                     </select>
                                 </div>
 

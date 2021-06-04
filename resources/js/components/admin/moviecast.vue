@@ -54,7 +54,7 @@
 
                         <div class="form-group">
                             <label>Select Movie:</label>
-                            <select class='form-control' v-model='m_id' >
+                            <select class='form-control' id="getmovie" v-model='m_id' >
                                 <option v-for="movie in movies" :value="movie.id">{{movie.title}}</option>
                             </select>
                         </div>
@@ -98,14 +98,14 @@
                                 <div class="form-group">
                                     <label>Select Caste:</label>
                                     <select class='form-control' v-model='editc_id' @change="getCast">
-                                        <option v-for="cast in casts"  :value="cast.id">{{cast.name}}</option>
+                                        <option v-for="cast in casts"  :value="c_id.id">{{cast.name}}</option>
                                     </select>
 
                                 </div>
                                 <div class="form-group">
                                     <label>Select Movie:</label>
                                     <select class='form-control' v-model='editm_id' @change="getMovie">
-                                        <option v-for="movie in movies" :value="movie.id">{{movie.title}}</option>
+                                        <option v-for="movie in movies" :value="m_id.id">{{movie.title}}</option>
                                     </select>
                                 </div>
 
@@ -197,7 +197,7 @@ export default {
             }
         },
         getMovie: function () {
-            axios.get('/api/getmovie/' + this.$route.params.id)
+            axios.get('/api/getmovie')
                 .then(response => {
                     this.movies = response.data
                 })

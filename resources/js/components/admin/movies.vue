@@ -134,7 +134,7 @@
                                     <input type="number" v-model="edityear" class="form-control" id="edityear"  placeholder="Enter year">
                                 </div>
                                 <div class="form-group">
-                                    <label for="editruntime">Cast Members</label>
+                                    <label for="editruntime">runtime</label>
                                     <input type="text" v-model="editruntime" class="form-control" id="editruntime"  placeholder="Enter cast">
                                 </div>
                                 <button type="submit"  @click.prevent="updatemovie" data-dismiss="modal" class="btn btn-primary">Submit</button>
